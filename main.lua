@@ -94,6 +94,8 @@ local function save()
 end
 
 local color = 0
+local prevX, prevY
+
 function love.update(dt)
     if     M.keyboard.isDown("b") then color = 1
     elseif M.keyboard.isDown("r") then color = 2
@@ -102,15 +104,41 @@ function love.update(dt)
 
     local pointX = math.floor(M.mouse.getX() / gridProp.width) + 1
     local pointY = math.floor(M.mouse.getY() / gridProp.height) + 1
-    if M.mouse.isDown(1) then
-        for i = math.floor(pointX - radius + 1), math.floor(pointX + radius) do
-            for j = math.floor(pointY - radius + 1), math.floor(pointY + radius) do
-                if current_grid[i] ~= nil then
-                    current_grid[i][j] = color
+
+    if prevX ~= nil and prevY ~= nil then
+        if M.mouse.isDown(1) then
+
+            local dx = pointX - prevX
+            local dy = pointY - prevY
+            local dist = math.sqrt(dx*dx + dy*dy)
+            local step = math.ceil(dist)
+
+            for k = 0, step do
+                local t = k / step
+                local curX = prevX + (pointX - prevX) * t
+                local curY = prevY + (pointY - prevY) * t
+
+                for i = math.floor(curX - radius + 1), math.floor(curX + radius) do
+                    for j = math.floor(curY - radius + 1), math.floor(curY + radius) do
+                        if current_grid[i] ~= nil then
+                            current_grid[i][j] = color
+                        end
+                    end
                 end
             end
+
+            -- for i = math.floor(pointX - radius + 1), math.floor(pointX + radius) do
+            --     for j = math.floor(pointY - radius + 1), math.floor(pointY + radius) do
+            --         if current_grid[i] ~= nil then
+            --             current_grid[i][j] = color
+            --         end
+            --     end
+            -- end
         end
     end
+
+    prevX = pointX
+    prevY = pointY
 
     if M.keyboard.isDown("space") then save() end
     if M.keyboard.isDown("escape") then
@@ -118,11 +146,11 @@ function love.update(dt)
         love.event.quit()
     end
 
+    t = 1 / dt
+
 end
 
 function love.draw()
-    M.graphics.print(currentX, 100, 150)
-    M.graphics.print(currentY, 100, 200)
     for i = 1, gridProp.countX do
         for j = 1, gridProp.countY do
             local value = current_grid[i][j]
@@ -140,4 +168,7 @@ function love.draw()
 
     M.graphics.setColor(0, 1, 1)
     M.graphics.print(radius, 100, 100)
+    M.graphics.print(currentX, 100, 150)
+    M.graphics.print(currentY, 100, 200)
+    M.graphics.print(t, 100, 50)
 end
