@@ -1,6 +1,6 @@
 _G.M = love
 
-local grid     = {}
+local grid     = require "map"
 local gridProp = {}
 function love.load()
     gridProp.width  = 1
@@ -8,11 +8,28 @@ function love.load()
     gridProp.countX = math.floor(M.graphics.getWidth() / gridProp.width)
     gridProp.countY = math.floor(M.graphics.getHeight() / gridProp.height)
 
-    for i = 1, gridProp.countX do
-        grid[i] = {}
-        for j = 1, gridProp.countY do
-            grid[i][j] = 0
+    -- for i = 1, gridProp.countX do
+    --     grid[i] = {}
+    --     for j = 1, gridProp.countY do
+    --         grid[i][j] = 0
+    --     end
+    -- end
+end
+
+local function save()
+    local file = io.open("map.lua", "w")
+    if file then
+        file:write("local grid = {\n")
+        for i = 1, #grid do
+            file:write("\t{")
+            for j = 1, #grid[i] do
+                file:write(grid[i][j] .. ", ")
+            end
+            file:write("},\n")
         end
+        file:write("\n}\n")
+        file:write("return grid")
+        file:close()
     end
 end
 
@@ -24,8 +41,8 @@ function love.update(dt)
     elseif M.keyboard.isDown("y") then color = 3
     elseif M.keyboard.isDown("c") then color = 0 end
 
-    if M.keyboard.isDown("p") then radius = radius + 1 * dt * 5
-    elseif M.keyboard.isDown("m") then radius = radius - 1 * dt * 5 end
+    if M.keyboard.isDown("p") then radius = radius + 1 * dt * 10
+    elseif M.keyboard.isDown("m") then radius = radius - 1 * dt * 10 end
 
     local pointX = math.floor(M.mouse.getX() / gridProp.width) + 1
     local pointY = math.floor(M.mouse.getY() / gridProp.height) + 1
@@ -38,6 +55,13 @@ function love.update(dt)
             end
         end
     end
+
+    if M.keyboard.isDown("space") then save() end
+    if M.keyboard.isDown("escape") then
+        save()
+        love.event.quit()
+    end
+
 end
 
 function love.draw()
