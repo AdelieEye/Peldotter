@@ -7,9 +7,9 @@ local function draw(current_grid)
             local value = current_grid[i][j]
             if value ~= 0 then
 
-                if     value == enum.BLACK  then M.graphics.setColor(0, 0, 0)
-                elseif value == enum.RED    then M.graphics.setColor(1, 0, 0)
-                elseif value == enum.YELLOW then M.graphics.setColor(1, 1, 0)
+                if     value == enum.BLACK  then M.graphics.setColor(0.4, 0.4, 0.4)
+                elseif value == enum.RED    then M.graphics.setColor(0, 1, 1)
+                elseif value == enum.YELLOW then M.graphics.setColor(0, 0, 1)
                 end
 
                 M.graphics.rectangle(

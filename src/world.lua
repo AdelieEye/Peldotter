@@ -10,6 +10,17 @@ world.currentX = (1 + core.gridProp.gridGroupX) / 2
 world.currentY = (1 + core.gridProp.gridGroupY) / 2
 world.current_grid = {}
 
+world.imgs_obj = {}
+world.imgs_file = {
+    "/imgs/lv_01.png", "/imgs/lv_02.png", "/imgs/lv_03.png", "/imgs/lv_04.png",
+    "/imgs/lv_05.png", "/imgs/lv_06.png", "/imgs/lv_07.png", "/imgs/lv_08.png",
+    "/imgs/lv_09.png", "/imgs/lv_10.png", "/imgs/lv_11.png", "/imgs/lv_12.png",
+    "/imgs/lv_13.png", "/imgs/lv_14.png", "/imgs/lv_15.png", "/imgs/lv_16.png",
+    "/imgs/lv_17.png", "/imgs/lv_18.png", "/imgs/lv_19.png", "/imgs/lv_20.png",
+    "/imgs/lv_21.png", "/imgs/lv_22.png", "/imgs/lv_23.png", "/imgs/lv_24.png",
+    "/imgs/lv_25.png",
+    }
+
 world.radius = 0
 
 local ok, mod = pcall(require, "map")
@@ -19,6 +30,10 @@ function world:create()
     M.graphics.setBackgroundColor(0.4, 0.4, 0.4, 1)
     world.grid = utils.checkNCreateGrid() or map
     self.current_grid = world.grid[self.currentX][self.currentY]
+
+    for i, img in ipairs(world.imgs_file) do
+        world.imgs_obj[i] = M.graphics.newImage(img)
+    end
 end
 
 function world:keyboard_inputs(key)
@@ -28,7 +43,7 @@ function world:keyboard_inputs(key)
     elseif key == "right" then self.currentX = math.min(core.gridProp.gridGroupX, self.currentX + 1)
 
     elseif key == "p" then self.radius = self.radius + 1
-    elseif key == "m" then self.radius = self.radius - 1
+    elseif key == "m" then self.radius = math.max(0, self.radius - 1)
 
     elseif key == "b" then self.color = enum.BLACK
     elseif key == "r" then self.color = enum.RED
@@ -49,6 +64,10 @@ function world:update()
 end
 
 function world:draw()
+    local index = (world.currentX - 1) * 5 + (world.currentY)
+    M.graphics.setColor(1, 0, 0)
+    M.graphics.draw(world.imgs_obj[index], 0, 0)
+
     core.draw(self.current_grid)
 end
 
