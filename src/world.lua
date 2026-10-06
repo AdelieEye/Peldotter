@@ -49,6 +49,7 @@ function world:keyboard_inputs(key)
     elseif key == "r" then self.color = enum.RED
     elseif key == "y" then self.color = enum.YELLOW
     elseif key == "c" then self.color = enum.CLEAR
+    elseif key == "g" then self.color = enum.GREEN
 
     elseif key == "space"  then utils.save(self.grid)
     elseif key == "escape" then

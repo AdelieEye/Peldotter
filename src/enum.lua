@@ -3,4 +3,5 @@ return {
     BLACK  = 1,
     RED    = 2,
     YELLOW = 3,
+    GREEN  = 4,
 }
