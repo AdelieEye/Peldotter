@@ -10,6 +10,8 @@ world.currentX = (1 + core.gridProp.gridGroupX) / 2
 world.currentY = (1 + core.gridProp.gridGroupY) / 2
 world.current_grid = {}
 
+local width = M.graphics.getWidth()
+
 world.imgs_obj = {}
 world.imgs_file = {
     "/imgs/lv_01.png", "/imgs/lv_02.png", "/imgs/lv_03.png", "/imgs/lv_04.png",
@@ -24,13 +26,15 @@ world.imgs_file = {
 world.radius = 0
 
 function world:create()
+    self.color = -1
     M.graphics.setBackgroundColor(0.4, 0.4, 0.4, 1)
     world.grid = utils.checkNCreateGrid()
     self.current_grid = world.grid[self.currentX][self.currentY]
 
-    for i, img in ipairs(world.imgs_file) do
-        world.imgs_obj[i] = M.graphics.newImage(img)
-    end
+    world.imgs_obj[1] = M.graphics.newImage(world.imgs_file[1])
+    -- for i, img in ipairs(world.imgs_file) do
+    --     world.imgs_obj[i] = M.graphics.newImage(img)
+    -- end
 end
 
 function world:keyboard_inputs(key)
@@ -62,11 +66,24 @@ function world:update()
 end
 
 function world:draw()
-    local index = (world.currentX - 1) * 5 + (world.currentY)
+    -- local index = (world.currentX - 1) * 5 + (world.currentY)
     M.graphics.setColor(1, 0, 0)
-    M.graphics.draw(world.imgs_obj[index], 0, 0)
+    M.graphics.draw(world.imgs_obj[1], 0, 0)
 
     core.draw(self.current_grid)
+
+    M.graphics.setColor(1, 1, 1, 1)
+    local X = M.mouse.getX()
+    local Y = M.mouse.getY()
+    M.graphics.rectangle("line", X - self.radius * 5, Y - self.radius * 5, self.radius * 10 + 0.1, self.radius * 10 + 0.1)
+
+    M.graphics.setColor(1, 0, 0, 0.3)
+    M.graphics.rectangle("fill", 0, 0, width, 20)
+    M.graphics.setColor(1, 1, 1)
+    M.graphics.print("col: " .. self.color, width * 0/ 4, 0)
+    M.graphics.print("rad: " .. self.radius, width * 1 / 4, 0)
+    M.graphics.print("aaaa", width * 2 / 4, 0)
+    M.graphics.print("aaaa", width * 3 / 4, 0)
 end
 
 return world
