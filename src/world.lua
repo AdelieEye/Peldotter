@@ -19,16 +19,13 @@ world.imgs_file = {
     "/imgs/lv_17.png", "/imgs/lv_18.png", "/imgs/lv_19.png", "/imgs/lv_20.png",
     "/imgs/lv_21.png", "/imgs/lv_22.png", "/imgs/lv_23.png", "/imgs/lv_24.png",
     "/imgs/lv_25.png",
-    }
+}
 
 world.radius = 0
 
-local ok, mod = pcall(require, "map")
-local map = ok and mod or {}
-
 function world:create()
     M.graphics.setBackgroundColor(0.4, 0.4, 0.4, 1)
-    world.grid = utils.checkNCreateGrid() or map
+    world.grid = utils.checkNCreateGrid()
     self.current_grid = world.grid[self.currentX][self.currentY]
 
     for i, img in ipairs(world.imgs_file) do
